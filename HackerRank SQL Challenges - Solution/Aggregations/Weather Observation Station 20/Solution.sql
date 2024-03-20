@@ -1,6 +1,3 @@
-/*
-Enter your query here.
-Please append a semicolon ";" at the end of the query and enter your query in a single line to avoid error.
-*/
-SELECT ROUND(MEDIAN(LAT_N), 4)
+SELECT 
+  ROUND(PERCENTILE_DISC(0.5) WITHIN GROUP(ORDER BY LAT_N), 4)
 FROM STATION;
