@@ -1,31 +1,17 @@
-/*
-Enter your query here.
-Please append a semicolon ";" at the end of the query and enter your query in a single line to avoid error.
-*/
-SELECT *
+SELECT 
+    MAX(D), 
+    MAX(P), 
+    MAX(S), 
+    MAX(A)
 FROM
-  (SELECT MIN(DOCTOR) MIN_DOCTOR,
-          MIN(PROFESSOR) MIN_PROFESSOR,
-          MIN(SINGER) MIN_SINGER,
-          MIN(ACTOR) MIN_ACTOR
-   FROM
-     (SELECT CASE
-                 WHEN OCCUPATION = 'Doctor' THEN NAME
-             END AS DOCTOR,
-             CASE
-                 WHEN OCCUPATION = 'Professor' THEN NAME
-             END AS PROFESSOR,
-             CASE
-                 WHEN OCCUPATION = 'Singer' THEN NAME
-             END AS SINGER,
-             CASE
-                 WHEN OCCUPATION = 'Actor' THEN NAME
-             END AS ACTOR,
-             RANK() OVER (PARTITION BY OCCUPATION
-                          ORDER BY NAME) AS ROW_RANK
-      FROM OCCUPATIONS) X
-   GROUP BY ROW_RANK)
-ORDER BY MIN_DOCTOR,
-         MIN_PROFESSOR,
-         MIN_SINGER,
-         MIN_ACTOR;
+(
+    SELECT 
+        CASE WHEN OCCUPATION = 'Doctor' THEN NAME END AS D,
+        CASE WHEN OCCUPATION = 'Professor' THEN NAME END AS P,
+        CASE WHEN OCCUPATION = 'Singer' THEN NAME END AS S,
+        CASE WHEN OCCUPATION = 'Actor' THEN NAME END AS A,
+        ROW_NUMBER() OVER (PARTITION BY OCCUPATION ORDER BY NAME) AS R
+    FROM 
+        OCCUPATIONS
+) T1
+GROUP BY R;
